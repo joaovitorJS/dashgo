@@ -20,7 +20,7 @@ export default function SignIn() {
   });
   const { errors } = formState;
   
-  const handleSignIn: SubmitHandler<SignInFormData> = async (values, event) => {
+  const handleSignIn: SubmitHandler<SignInFormData> = (values, event) => {
     
   }
 
