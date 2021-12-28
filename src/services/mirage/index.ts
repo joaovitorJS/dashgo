@@ -51,6 +51,9 @@ export function makeeServer() {
           { users }
         )
       });
+
+      this.get('/users/:id'); //shorthand do mirage
+
       this.post('/users');
 
       this.namespace = '';
