@@ -22,15 +22,28 @@ import { RiAddLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
-import { useUsers } from '../../services/hooks/useUsers';
+import { getUsers, useUsers } from '../../services/hooks/useUsers';
 import { useState } from 'react';
 import { queryClient } from '../../services/queryClient';
 import { api } from '../../services/api';
+import { GetServerSideProps } from 'next';
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
 
-export default function UserList() {
+interface UserListProps {
+  users: User[];
+}
+
+export default function UserList({ users }: UserListProps) {
   const [page, setPage] = useState(1);
-  const { data, isLoading, error, isFetching } = useUsers(page);
+  const { data, isLoading, error, isFetching } = useUsers(page, {
+    initialData: users
+  });
 
 
   const isWideVersion = useBreakpointValue({
@@ -115,7 +128,7 @@ export default function UserList() {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {data.users.map(user => {
+                    {data?.users.map(user => {
                       return (
                         <Tr key={user.id}>
                           <Td px={["4", "4", "6"]}>
@@ -142,7 +155,7 @@ export default function UserList() {
                 </Table>
 
                 <Pagination 
-                  totalCountOfRegister={data.totalCount}
+                  totalCountOfRegister={data?.totalCount}
                   currentPage={page}
                   onPageChange={setPage}
                 />
@@ -153,4 +166,16 @@ export default function UserList() {
       </Flex>
     </Box>
   );
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users, totalCount} = await getUsers(1);
+  
+
+
+  return {
+    props: {
+      users,
+    }
+  }
 }

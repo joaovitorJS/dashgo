@@ -1,7 +1,7 @@
 import { createServer, Factory, Model, Response, ActiveModelSerializer } from "miragejs";
 import faker from "faker";
 
-type User = {
+export type User = {
   name: string;
   email: string;
   created_at: string;
